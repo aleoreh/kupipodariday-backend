@@ -33,6 +33,6 @@ export class Wishlist {
   @IsUrl()
   image: string;
 
-  @Column({ array: true })
+  @Column('text', { array: true })
   items: string[];
 }

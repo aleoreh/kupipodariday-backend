@@ -37,7 +37,6 @@ export class Wish {
   @Column('decimal', { scale: 2 })
   raised: number;
 
-  @Column()
   @ManyToOne(() => User, (user) => user.wishes)
   owner: User;
 
@@ -45,7 +44,7 @@ export class Wish {
   @Length(1, 1024)
   description: string;
 
-  @Column({ array: true })
+  @Column('text', { array: true })
   offers: string[];
 
   @Column('decimal', { scale: 2 })
