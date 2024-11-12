@@ -31,10 +31,10 @@ export class Wish {
   @IsUrl()
   image: string;
 
-  @Column('int')
+  @Column('decimal', { scale: 2 })
   price: number;
 
-  @Column('int')
+  @Column('decimal', { scale: 2 })
   raised: number;
 
   @Column()
@@ -48,6 +48,6 @@ export class Wish {
   @Column({ array: true })
   offers: string[];
 
-  @Column('int')
+  @Column('decimal', { scale: 2 })
   copied: number;
 }
