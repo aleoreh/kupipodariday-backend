@@ -4,7 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { WishesModule } from './wishes/wishes.module';
-import { WhishlistsModule } from './whishlists/whishlists.module';
+import { WishlistsModule } from './wishlists/wishlists.module';
 import { OffersModule } from './offers/offers.module';
 
 @Module({
@@ -21,7 +21,7 @@ import { OffersModule } from './offers/offers.module';
     }),
     UsersModule,
     WishesModule,
-    WhishlistsModule,
+    WishlistsModule,
     OffersModule,
   ],
   controllers: [AppController],

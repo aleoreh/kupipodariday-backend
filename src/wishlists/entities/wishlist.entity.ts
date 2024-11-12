@@ -8,7 +8,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 
 @Entity()
-export class Whishlist {
+export class Wishlist {
   @PrimaryGeneratedColumn()
   @ManyToOne(() => User, (user) => user.wishlists)
   id: number;

@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Wish } from '../../wishes/entities/wish.entity';
 import { Offer } from '../../offers/entities/offer.entity';
-import { Whishlist } from '../../whishlists/entities/whishlist.entity';
+import { Wishlist } from '../../wishlists/entities/wishlist.entity';
 
 @Entity()
 export class User {
@@ -53,6 +53,6 @@ export class User {
   @OneToMany(() => Offer, (offer) => offer.id)
   offers: Offer[];
 
-  @OneToMany(() => Whishlist, (wishlist) => wishlist.id)
-  wishlists: Whishlist[];
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.id)
+  wishlists: Wishlist[];
 }
