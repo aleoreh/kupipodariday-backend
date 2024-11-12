@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -6,6 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { IsUrl, Length } from 'class-validator';
 
 @Entity()
 export class Wishlist {
@@ -18,4 +20,19 @@ export class Wishlist {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column()
+  @Length(1, 250)
+  name: string;
+
+  @Column()
+  @Length(0, 1500)
+  description: string;
+
+  @Column()
+  @IsUrl()
+  image: string;
+
+  @Column({ array: true })
+  items: string[];
 }
