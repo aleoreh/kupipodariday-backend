@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -6,11 +7,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { IsUrl } from 'class-validator';
 
 @Entity()
 export class Offer {
   @PrimaryGeneratedColumn()
-  @ManyToOne(() => User, (user) => user.offers)
   id: number;
 
   @CreateDateColumn()
@@ -18,4 +19,18 @@ export class Offer {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column()
+  @ManyToOne(() => User, (user) => user.offers)
+  user: User;
+
+  @Column()
+  @IsUrl()
+  item: string;
+
+  @Column('decimal', { scale: 2 })
+  amount: number;
+
+  @Column({ default: false })
+  hidden: boolean;
 }
