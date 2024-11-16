@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
+import { AuthService } from './auth/auth.service';
 import { Offer } from './offers/entities/offer.entity';
 import { OffersModule } from './offers/offers.module';
 import { User } from './users/entities/user.entity';
@@ -27,8 +31,11 @@ import { WishlistsModule } from './wishlists/wishlists.module';
     WishesModule,
     WishlistsModule,
     OffersModule,
+    JwtModule,
+    PassportModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthService],
 })
 export class AppModule {}
