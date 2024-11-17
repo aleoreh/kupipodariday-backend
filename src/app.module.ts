@@ -14,9 +14,11 @@ import { Wish } from './wishes/entities/wish.entity';
 import { WishesModule } from './wishes/wishes.module';
 import { Wishlist } from './wishlists/entities/wishlist.entity';
 import { WishlistsModule } from './wishlists/wishlists.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',

@@ -3,7 +3,7 @@ import { UsersService } from '../users/users.service';
 import { LocalGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
