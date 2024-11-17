@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
-import { LocalGuard } from './auth.guard';
+import { LocalGuard } from './local.guard';
 import { AuthService } from './auth.service';
 
 @Controller()
