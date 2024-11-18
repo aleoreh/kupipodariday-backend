@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Patch,
@@ -18,20 +17,15 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @UseGuards(JwtGuard)
-  @Get('me')
-  findMe(@Req() req) {
-    return this.usersService.findOne(req.user.id);
-  }
-
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @UseGuards(JwtGuard)
+  @Get('me')
+  findMe(@Req() req) {
+    return this.usersService.findOne(req.user.id);
   }
 
   @UseGuards(JwtGuard)
@@ -40,8 +34,8 @@ export class UsersController {
     return this.usersService.update(req.user.id, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Get(':username')
+  findByUsername(@Param('username') username: string) {
+    return this.usersService.findOneByUsername(username);
   }
 }
