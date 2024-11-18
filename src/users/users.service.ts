@@ -28,16 +28,11 @@ export class UsersService {
   }
 
   async findOne(id: number): Promise<User> {
-    const res = await this.userRepository.findOneBy({ id });
-    delete res.password;
-    return res;
+    return this.userRepository.findOneBy({ id });
   }
 
   async findOneByUsername(username: string): Promise<User> {
-    const res = await this.userRepository.findOneBy({ username });
-    delete res.password;
-    delete res.email;
-    return res;
+    return this.userRepository.findOneBy({ username });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
