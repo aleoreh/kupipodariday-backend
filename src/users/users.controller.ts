@@ -51,4 +51,11 @@ export class UsersController {
       .findOneByUsername(username)
       .then((user) => new PublicUserDto(user));
   }
+
+  @Post('find')
+  findMany(@Body() param: { query: string }): Promise<SafeUserDto[]> {
+    return this.usersService
+      .find(param.query)
+      .then((users) => users.map((user) => new SafeUserDto(user)));
+  }
 }
