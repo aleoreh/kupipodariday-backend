@@ -24,29 +24,30 @@ export class Wish {
   @Length(1, 250)
   name: string;
 
-  @Column()
+  @Column({ default: '' })
+  @IsUrl()
   link: string;
 
-  @Column()
+  @Column({ default: '' })
   @IsUrl()
   image: string;
 
   @Column('decimal', { scale: 2 })
   price: number;
 
-  @Column('decimal', { scale: 2 })
+  @Column('decimal', { scale: 2, default: 0 })
   raised: number;
 
   @ManyToOne(() => User, (user) => user.wishes)
   owner: User;
 
-  @Column()
+  @Column({ default: '' })
   @Length(1, 1024)
   description: string;
 
-  @Column('text', { array: true })
+  @Column('text', { array: true, default: [] })
   offers: string[];
 
-  @Column('decimal', { scale: 2 })
+  @Column('decimal', { scale: 2, default: 0 })
   copied: number;
 }
