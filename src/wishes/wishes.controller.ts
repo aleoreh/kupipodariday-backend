@@ -24,6 +24,13 @@ export class WishesController {
     return this.wishesService.create(createWishDto, req.user.id);
   }
 
+  @Get('last')
+  getLast() {
+    return this.wishesService.findAll();
+  }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+
   @Get()
   findAll() {
     return this.wishesService.findAll();

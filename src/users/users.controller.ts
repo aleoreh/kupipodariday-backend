@@ -45,12 +45,20 @@ export class UsersController {
       .then((user) => new SafeUserDto(user));
   }
 
+  @UseGuards(JwtGuard)
+  @Get('me/wishes')
+  getMeWishes(@Req() req) {
+    return this.usersService.findOne(req.user.id).then((user) => user.wishes);
+  }
+
   @Get(':username')
   findByUsername(@Param('username') username: string): Promise<PublicUserDto> {
     return this.usersService
       .findOneByUsername(username)
       .then((user) => new PublicUserDto(user));
   }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   @Post('find')
   findMany(@Body() param: { query: string }): Promise<SafeUserDto[]> {
