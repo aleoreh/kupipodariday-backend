@@ -29,6 +29,11 @@ export class WishesController {
     return this.wishesService.findAll();
   }
 
+  @Get('top')
+  getTop() {
+    return this.wishesService.findAll();
+  }
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   @Get()
