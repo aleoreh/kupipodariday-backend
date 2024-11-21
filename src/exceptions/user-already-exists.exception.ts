@@ -1,7 +1,3 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { DomainException } from './domain-exception';
 
-export class UserAlreadyExistsEception extends HttpException {
-  constructor() {
-    super('Такой пользователь существует', HttpStatus.BAD_REQUEST);
-  }
-}
+export class AlreadyExistsException extends DomainException {}

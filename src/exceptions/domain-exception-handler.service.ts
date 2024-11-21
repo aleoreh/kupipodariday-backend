@@ -1,15 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { AccessDeniedException } from './access-denied.exception';
-import { DomainException } from './exception';
+import { AccessDeniedException } from './access-denied.ecxeption';
+import { DomainException } from './domain-exception';
+import { AlreadyExistsException } from './user-already-exists.exception';
 
 @Injectable()
 export class DomainExceptionHandler {
-  private httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+  toHttp(error: DomainException): HttpException {
+    let httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
 
-  toHttpException(error: DomainException): HttpException {
     if (error instanceof AccessDeniedException)
-      this.httpStatus = HttpStatus.FORBIDDEN;
+      httpStatus = HttpStatus.FORBIDDEN;
 
-    return new HttpException(error, this.httpStatus);
+    if (error instanceof AlreadyExistsException)
+      httpStatus = HttpStatus.BAD_REQUEST;
+
+    throw new HttpException(error.message, httpStatus);
   }
 }
