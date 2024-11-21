@@ -69,4 +69,12 @@ export class WishesController {
       throw this.exceptionHandler.toHttp(err);
     });
   }
+
+  @UseGuards(JwtGuard)
+  @Post(':id/copy')
+  copy(@Req() req, @Param('id') id: number) {
+    return this.wishesService
+      .findOne(id)
+      .then((wish) => this.wishesService.create(wish, req.user.id));
+  }
 }
