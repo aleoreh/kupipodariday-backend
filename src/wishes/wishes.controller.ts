@@ -52,6 +52,14 @@ export class WishesController {
       });
   }
 
+  @UseGuards(JwtGuard)
+  @Delete(':id')
+  remove(@Req() req, @Param('id') id: string) {
+    return this.wishesService.remove(+id).catch((err) => {
+      throw this.exceptionHandler.toHttpException(err);
+    });
+  }
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   @Get()
@@ -62,10 +70,5 @@ export class WishesController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.wishesService.findOne(+id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.wishesService.remove(+id);
   }
 }

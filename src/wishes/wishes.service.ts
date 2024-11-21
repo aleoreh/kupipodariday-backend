@@ -51,6 +51,14 @@ export class WishesService {
   }
 
   async remove(id: number) {
+    const wish = await this.wishRepository.findOneBy({ id });
+
+    if (wish.offers.length > 0) {
+      throw new AccessDeniedException(
+        'Уже есть желающие скинуться. Удалить нельзя',
+      );
+    }
+
     return this.wishRepository.delete({ id });
   }
 }
