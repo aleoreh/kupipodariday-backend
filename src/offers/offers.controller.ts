@@ -7,18 +7,27 @@ import {
   Patch,
   Post,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { UpdateOfferDto } from './dto/update-offer.dto';
 import { OffersService } from './offers.service';
+import { JwtGuard } from '../jwt/jwt.guard';
+import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 
 @Controller('offers')
 export class OffersController {
-  constructor(private readonly offersService: OffersService) {}
+  constructor(
+    private readonly offersService: OffersService,
+    private readonly errorHandler: DomainErrorHandler,
+  ) {}
 
+  @UseGuards(JwtGuard)
   @Post()
   create(@Req() req, @Body() createOfferDto: CreateOfferDto) {
-    return this.offersService.create(createOfferDto, req.user.id);
+    return this.offersService
+      .create(createOfferDto, req.user.id)
+      .catch(this.errorHandler.toHttp);
   }
 
   @Get()
