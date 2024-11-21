@@ -47,9 +47,7 @@ export class WishesController {
   ) {
     return this.wishesService
       .update(+id, updateWishDto, req.user.id)
-      .catch((err) => {
-        throw this.exceptionHandler.toHttp(err);
-      });
+      .catch(this.exceptionHandler.toHttp);
   }
 
   @Get()

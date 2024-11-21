@@ -45,7 +45,7 @@ export class User implements IUser {
   @IsEmail()
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
   @OneToMany(() => Wish, (wish) => wish.owner)

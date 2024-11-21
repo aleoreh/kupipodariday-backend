@@ -31,7 +31,10 @@ export class WishesService {
   }
 
   async findOne(id: number) {
-    return this.wishRepository.findOneBy({ id });
+    return this.wishRepository.findOne({
+      where: { id },
+      relations: { owner: true },
+    });
   }
 
   async update(id: number, updateWishDto: UpdateWishDto, userId: number) {
