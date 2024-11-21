@@ -9,7 +9,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { DomainExceptionHandler } from '../exceptions/domain-exception-handler.service';
+import { DomainErrorHandler } from '../exceptions/domain-error-handler.service';
 import { JwtGuard } from '../jwt/jwt.guard';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
@@ -19,7 +19,7 @@ import { WishesService } from './wishes.service';
 export class WishesController {
   constructor(
     private readonly wishesService: WishesService,
-    private readonly exceptionHandler: DomainExceptionHandler,
+    private readonly exceptionHandler: DomainErrorHandler,
   ) {}
 
   @UseGuards(JwtGuard)
@@ -48,7 +48,7 @@ export class WishesController {
     return this.wishesService
       .update(+id, updateWishDto, req.user.id)
       .catch((err) => {
-        throw this.exceptionHandler.toHttpException(err);
+        throw this.exceptionHandler.toHttp(err);
       });
   }
 
@@ -66,7 +66,7 @@ export class WishesController {
   @Delete(':id')
   remove(@Req() req, @Param('id') id: string) {
     return this.wishesService.remove(+id).catch((err) => {
-      throw this.exceptionHandler.toHttpException(err);
+      throw this.exceptionHandler.toHttp(err);
     });
   }
 }

@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { AccessDeniedError } from '../exceptions/access-denied.error';
+import { User } from '../users/entities/user.entity';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Wish } from './entities/wish.entity';
-import { Repository } from 'typeorm';
-import { User } from '../users/entities/user.entity';
-import { AccessDeniedException } from '../exceptions/access-denied.exception';
 
 @Injectable()
 export class WishesService {
@@ -38,11 +38,11 @@ export class WishesService {
     const wish = await this.wishRepository.findOneBy({ id });
 
     if (wish.owner.id !== userId) {
-      throw new AccessDeniedException('Нельзя редактировать чужие желания');
+      throw new AccessDeniedError('Нельзя редактировать чужие желания');
     }
 
     if (wish.offers.length > 0) {
-      throw new AccessDeniedException(
+      throw new AccessDeniedError(
         'Уже есть желающие скинуться. Ничего нельзя сделать',
       );
     }
@@ -54,7 +54,7 @@ export class WishesService {
     const wish = await this.wishRepository.findOneBy({ id });
 
     if (wish.offers.length > 0) {
-      throw new AccessDeniedException(
+      throw new AccessDeniedError(
         'Уже есть желающие скинуться. Удалить нельзя',
       );
     }

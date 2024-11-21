@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { DomainExceptionHandler } from '../exceptions/domain-exception-handler.service';
+import { DomainErrorHandler } from '../exceptions/domain-error-handler.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
@@ -10,7 +10,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
-    private readonly exceptionHandler: DomainExceptionHandler,
+    private readonly exceptionHandler: DomainErrorHandler,
   ) {}
 
   @UseGuards(LocalGuard)
