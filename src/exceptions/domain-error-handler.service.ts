@@ -5,8 +5,6 @@ import { DomainError } from './domain-error';
 
 @Injectable()
 export class DomainErrorHandler {
-  private readonly logger = new Logger(DomainErrorHandler.name);
-
   toHttp(error: DomainError): HttpException {
     let httpStatus: HttpStatus | null = null;
 
@@ -15,7 +13,9 @@ export class DomainErrorHandler {
     if (error instanceof AlreadyExistsError)
       httpStatus = HttpStatus.BAD_REQUEST;
 
-    Logger.error(error.message, error.stack);
+    // используем статический метод логгера, так как метод toHttp используется
+    // в контроллерах без привязки this (promise.catch(this.exceptionHandler.toHttp))
+    Logger.error(`Ошибочка вышла: ${error.message}`, error.stack);
 
     switch (httpStatus) {
       case null:
