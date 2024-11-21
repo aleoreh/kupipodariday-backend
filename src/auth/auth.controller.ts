@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { DomainErrorHandler } from '../exceptions/domain-error-handler.service';
+import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';

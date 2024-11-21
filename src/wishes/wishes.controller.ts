@@ -9,7 +9,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { DomainErrorHandler } from '../exceptions/domain-error-handler.service';
+import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 import { JwtGuard } from '../jwt/jwt.guard';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';

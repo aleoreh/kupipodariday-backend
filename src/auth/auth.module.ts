@@ -7,7 +7,7 @@ import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
-import { DomainErrorHandler } from '../exceptions/domain-error-handler.service';
+import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 
 @Module({
   imports: [

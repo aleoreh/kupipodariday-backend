@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AccessDeniedError } from '../exceptions/access-denied.error';
+import { AccessDeniedError } from '../errors/access-denied.error';
 import { User } from '../users/entities/user.entity';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
