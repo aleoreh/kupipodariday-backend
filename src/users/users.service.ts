@@ -5,6 +5,7 @@ import { Like, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { AlreadyExistsException } from '../exceptions/user-already-exists.exception';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +15,14 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const foundUser = await this.userRepository.findOneBy({
+      username: createUserDto.username,
+    });
+
+    if (foundUser) {
+      throw new AlreadyExistsException('Такой пользователь уже есть!');
+    }
+
     return bcrypt.hash(createUserDto.password, 10).then((hashedPassword) => {
       const user = this.userRepository.create({
         ...createUserDto,

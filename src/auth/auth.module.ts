@@ -7,6 +7,7 @@ import { UsersModule } from '../users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
+import { DomainExceptionHandler } from '../exceptions/domain-exception-handler.service';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { LocalStrategy } from './local.strategy';
     UsersModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, DomainExceptionHandler],
 })
 export class AuthModule {}

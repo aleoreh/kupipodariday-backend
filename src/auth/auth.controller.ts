@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
-import { UserAlreadyExistsEception } from '../exceptions/user-already-exists.exception';
+import { DomainExceptionHandler } from '../exceptions/domain-exception-handler.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
 import { AuthService } from './auth.service';
@@ -10,6 +10,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly usersService: UsersService,
+    private readonly exceptionHandler: DomainExceptionHandler,
   ) {}
 
   @UseGuards(LocalGuard)
@@ -20,12 +21,11 @@ export class AuthController {
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {
-    if (await this.usersService.findOneByUsername(createUserDto.username)) {
-      throw new UserAlreadyExistsEception();
-    }
-
-    const user = await this.usersService.create(createUserDto);
-
-    return this.authService.auth(user);
+    return this.usersService
+      .create(createUserDto)
+      .then((user) => {
+        return this.authService.auth(user);
+      })
+      .catch(this.exceptionHandler.toHttp);
   }
 }
