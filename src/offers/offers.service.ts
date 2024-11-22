@@ -33,7 +33,9 @@ export class OffersService {
   }
 
   async findAll() {
-    return this.offerRepository.find();
+    return this.offerRepository.find({
+      relations: ['item', 'user'],
+    });
   }
 
   async findOne(id: number) {
