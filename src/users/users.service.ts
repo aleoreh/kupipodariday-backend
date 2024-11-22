@@ -37,11 +37,32 @@ export class UsersService {
   }
 
   async findOne(id: number): Promise<User> {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOne({
+      where: { id },
+      select: { password: false },
+    });
   }
 
   async findOneByUsername(username: string): Promise<User> {
-    return this.userRepository.findOneBy({ username });
+    return this.userRepository.findOne({
+      where: { username },
+      select: { password: false },
+    });
+  }
+
+  async findOnePrime(
+    query: { id: number } | { username: string },
+  ): Promise<User> {
+    return this.userRepository.findOne({
+      where: query,
+      select: { password: false },
+    });
+  }
+
+  async findOneForAuthByUsername(username: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: { username },
+    });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
