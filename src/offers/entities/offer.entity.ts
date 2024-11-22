@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { IsUrl } from 'class-validator';
+import { Wish } from '../../wishes/entities/wish.entity';
 
 @Entity()
 export class Offer {
@@ -23,9 +24,9 @@ export class Offer {
   @ManyToOne(() => User, (user) => user.offers)
   user: User;
 
-  @Column()
+  @ManyToOne(() => Wish, (wish) => wish.offers)
   @IsUrl()
-  item: string;
+  item: Wish;
 
   @Column('decimal', { scale: 2 })
   amount: number;
