@@ -1,19 +1,16 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
-  Patch,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { CreateOfferDto } from './dto/create-offer.dto';
-import { UpdateOfferDto } from './dto/update-offer.dto';
-import { OffersService } from './offers.service';
-import { JwtGuard } from '../jwt/jwt.guard';
 import { DomainErrorHandler } from '../errors/domain-error-handler.service';
+import { JwtGuard } from '../jwt/jwt.guard';
+import { CreateOfferDto } from './dto/create-offer.dto';
+import { OffersService } from './offers.service';
 
 @Controller('offers')
 export class OffersController {
@@ -35,20 +32,8 @@ export class OffersController {
     return this.offersService.findAll();
   }
 
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.offersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOfferDto: UpdateOfferDto) {
-    return this.offersService.update(+id, updateOfferDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.offersService.remove(+id);
   }
 }
