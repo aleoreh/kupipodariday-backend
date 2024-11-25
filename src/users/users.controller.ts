@@ -58,7 +58,12 @@ export class UsersController {
       .then((user) => new PublicUserDto(user));
   }
 
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+  @Get(':username/wishes')
+  getUserWishes(@Param('username') username: string) {
+    return this.usersService
+      .findOneByUsername(username)
+      .then((user) => user.wishes);
+  }
 
   @Post('find')
   findMany(@Body() param: { query: string }): Promise<SafeUserDto[]> {

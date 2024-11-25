@@ -37,6 +37,12 @@ export class WishesService {
     });
   }
 
+  async findByOwner(ownerId: number) {
+    return this.userRepository
+      .findOneBy({ id: ownerId })
+      .then((user) => this.wishRepository.findBy({ owner: user }));
+  }
+
   async update(id: number, updateWishDto: UpdateWishDto, userId: number) {
     const wish = await this.wishRepository.findOneBy({ id });
 

@@ -6,12 +6,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { AlreadyExistsError } from '../errors/already-exists.error';
+import { Wish } from '../wishes/entities/wish.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(Wish)
+    private wishRepository: Repository<Wish>,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
@@ -47,6 +50,7 @@ export class UsersService {
     return this.userRepository.findOne({
       where: { username },
       select: { password: false },
+      relations: ['wishes'],
     });
   }
 
@@ -87,5 +91,13 @@ export class UsersService {
     return this.userRepository.find({
       where: [{ username: Like(`%${query}%`) }, { email: Like(`%${query}%`) }],
     });
+  }
+
+  async getUserWishes(username: string) {
+    const user = await this.userRepository.findOne({
+      where: { username },
+      relations: ['wishes'],
+    });
+    return user.wishes;
   }
 }
