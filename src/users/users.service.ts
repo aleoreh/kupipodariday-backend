@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Like, Repository } from 'typeorm';
+import { AlreadyExistsError } from '../errors/already-exists.error';
+import { Wish } from '../wishes/entities/wish.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { AlreadyExistsError } from '../errors/already-exists.error';
-import { Wish } from '../wishes/entities/wish.entity';
 
 @Injectable()
 export class UsersService {
@@ -18,12 +18,17 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const foundUser = await this.userRepository.findOneBy({
-      username: createUserDto.username,
-    });
+    const foundUser = await this.userRepository.findOneBy([
+      {
+        username: createUserDto.username,
+      },
+      { email: createUserDto.email },
+    ]);
 
     if (foundUser) {
-      throw new AlreadyExistsError('Такой пользователь уже есть!');
+      throw new AlreadyExistsError(
+        'Пользователь с таким именем или электронной почтой уже есть!',
+      );
     }
 
     return bcrypt.hash(createUserDto.password, 10).then((hashedPassword) => {

@@ -48,7 +48,7 @@ export class User implements IUser {
   @Column()
   password: string;
 
-  @OneToMany(() => Wish, (wish) => wish.owner, { eager: true })
+  @OneToMany(() => Wish, (wish) => wish.owner)
   wishes: Wish[];
 
   @OneToMany(() => Offer, (offer) => offer.id)

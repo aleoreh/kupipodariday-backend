@@ -8,6 +8,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 import { JwtGuard } from '../jwt/jwt.guard';
 import { CreateUserDto } from './dto/create-user.dto';
 import { PublicUserDto } from './dto/public-user.dto';
@@ -17,13 +18,17 @@ import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly exceptionHandler: DomainErrorHandler,
+  ) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto): Promise<SafeUserDto> {
+  create(@Body() createUserDto: CreateUserDto) {
     return this.usersService
       .create(createUserDto)
-      .then((user) => new SafeUserDto(user));
+      .then((user) => new SafeUserDto(user))
+      .catch(this.exceptionHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)

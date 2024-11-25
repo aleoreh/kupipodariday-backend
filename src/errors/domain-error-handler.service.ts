@@ -20,7 +20,7 @@ export class DomainErrorHandler {
     switch (httpStatus) {
       case null:
         throw new HttpException(
-          'Ошибка на стороне сервере',
+          'Ошибка на стороне сервера',
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       default:
