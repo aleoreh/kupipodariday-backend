@@ -58,9 +58,9 @@ export class WishesService {
       throw new AccessDeniedError('Нельзя редактировать чужие желания');
     }
 
-    if (wish.offers.length > 0) {
+    if ('price' in updateWishDto && wish.offers.length > 0) {
       throw new AccessDeniedError(
-        'Уже есть желающие скинуться. Ничего нельзя сделать',
+        'Уже есть желающие скинуться. Ничего изменить стоимость',
       );
     }
 
