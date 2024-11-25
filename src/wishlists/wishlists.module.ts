@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { WishlistsService } from './wishlists.service';
-import { WishlistsController } from './wishlists.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 import { Wishlist } from './entities/wishlist.entity';
+import { WishlistsController } from './wishlists.controller';
+import { WishlistsService } from './wishlists.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Wishlist])],
   controllers: [WishlistsController],
-  providers: [WishlistsService],
+  providers: [WishlistsService, DomainErrorHandler],
   exports: [WishlistsService],
 })
 export class WishlistsModule {}
