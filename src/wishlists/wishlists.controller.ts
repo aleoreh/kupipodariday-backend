@@ -12,7 +12,7 @@ import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-whishlist.dto';
 import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 
-@Controller('wishlists')
+@Controller('wishlistlists')
 export class WishlistsController {
   constructor(
     private readonly wishlistsService: WishlistsService,

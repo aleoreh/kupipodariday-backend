@@ -1,19 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-whishlist.dto';
 import { Wishlist } from './entities/wishlist.entity';
+import { Wish } from '../wishes/entities/wish.entity';
 
 @Injectable()
 export class WishlistsService {
   constructor(
     @InjectRepository(Wishlist)
     private wishlistRepository: Repository<Wishlist>,
+
+    @InjectRepository(Wish)
+    private wishRepository: Repository<Wish>,
   ) {}
 
   async create(createWishlistDto: CreateWishlistDto) {
-    return this.wishlistRepository.create(createWishlistDto);
+    const wishlist = this.wishlistRepository.create(createWishlistDto);
+
+    const items = await this.wishRepository.find({
+      where: { id: In(createWishlistDto.itemsId) },
+    });
+
+    return this.wishlistRepository.save({ ...wishlist, items });
   }
 
   async findAll() {
@@ -21,7 +31,10 @@ export class WishlistsService {
   }
 
   async findOne(id: number) {
-    return this.wishlistRepository.findOneBy({ id });
+    return this.wishlistRepository.findOne({
+      where: { id },
+      relations: { items: true },
+    });
   }
 
   async update(id: number, updateWishlistDto: UpdateWishlistDto) {
