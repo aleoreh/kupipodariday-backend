@@ -28,7 +28,17 @@ export class WishesService {
       ...createWishDto,
       owner: user,
     });
-    return this.wishRepository.save(wish);
+    const res = await this.wishRepository.save(wish);
+
+    delete res.copied;
+    delete res.createdAt;
+    delete res.id;
+    delete res.offers;
+    delete res.owner;
+    delete res.raised;
+    delete res.updatedAt;
+
+    return res;
   }
 
   async findAll() {
