@@ -24,6 +24,7 @@ export class AuthService {
         bcrypt
           .compare(password, user.password)
           .then((isMatched) => (user && isMatched ? user : null)),
-      );
+      )
+      .catch(() => false);
   }
 }
