@@ -40,33 +40,31 @@ export class UsersService {
     });
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find();
-  }
-
-  async findOne(id: number): Promise<User> {
+  async findOne(
+    where: { id: number } | { username: string },
+    relations: 'wishes'[] = [],
+  ) {
     return this.userRepository.findOne({
-      where: { id },
+      where,
       select: { password: false },
-      relations: ['wishes'],
+      relations,
     });
   }
 
-  async findOneByUsername(username: string): Promise<User> {
-    return this.userRepository.findOne({
-      where: { username },
-      select: { password: false },
-      relations: ['wishes'],
-    });
+  async findById(id: number) {
+    return this.findOne({ id });
   }
 
-  async findOnePrime(
-    query: { id: number } | { username: string },
-  ): Promise<User> {
-    return this.userRepository.findOne({
-      where: query,
-      select: { password: false },
-    });
+  async findByIdWithWishes(id: number) {
+    return this.findOne({ id }, ['wishes']);
+  }
+
+  async findByUsername(username: string): Promise<User> {
+    return this.findOne({ username });
+  }
+
+  async findByUsernameWithWishes(username: string): Promise<User> {
+    return this.findOne({ username }, ['wishes']);
   }
 
   async findOneForAuthByUsername(username: string): Promise<User> {
@@ -86,7 +84,7 @@ export class UsersService {
         )
       : updateUserDto);
     await this.userRepository.update({ id }, data);
-    return this.findOne(id);
+    return this.findById(id);
   }
 
   async remove(id: number) {
