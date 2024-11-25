@@ -30,11 +30,13 @@ export class WishesController {
       .catch(this.exceptionHandler.toHttp);
   }
 
+  @UseGuards(JwtGuard)
   @Get('last')
   getLast() {
     return this.wishesService.findLast().catch(this.exceptionHandler.toHttp);
   }
 
+  @UseGuards(JwtGuard)
   @Get('top')
   getTop() {
     return this.wishesService.findTop().catch(this.exceptionHandler.toHttp);
@@ -52,11 +54,13 @@ export class WishesController {
       .catch(this.exceptionHandler.toHttp);
   }
 
+  @UseGuards(JwtGuard)
   @Get()
   findAll() {
     return this.wishesService.findAll().catch(this.exceptionHandler.toHttp);
   }
 
+  @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.wishesService.findOne(+id).catch(this.exceptionHandler.toHttp);

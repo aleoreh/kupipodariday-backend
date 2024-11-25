@@ -27,11 +27,13 @@ export class OffersController {
       .catch(this.errorHandler.toHttp);
   }
 
+  @UseGuards(JwtGuard)
   @Get()
   findAll() {
     return this.offersService.findAll().catch(this.errorHandler.toHttp);
   }
 
+  @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.offersService.findOne(+id).catch(this.errorHandler.toHttp);
