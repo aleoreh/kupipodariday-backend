@@ -20,11 +20,11 @@ export class AuthService {
   async validatePassword(username: string, password: string) {
     return this.usersService
       .findOneForAuthByUsername(username)
-      .then((user) =>
-        bcrypt
+      .then((user) => {
+        return bcrypt
           .compare(password, user.password)
-          .then((isMatched) => (user && isMatched ? user : null)),
-      )
+          .then((isMatched) => (user && isMatched ? user : null));
+      })
       .catch(() => false);
   }
 }

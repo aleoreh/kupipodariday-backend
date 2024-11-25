@@ -90,7 +90,7 @@ export class UsersService {
   async findOneForAuthByUsername(username: string): Promise<User> {
     return this.userRepository.findOne({
       where: { username },
-      select: ['id', 'username', 'password'],
+      select: ['username', 'password'],
     });
   }
 

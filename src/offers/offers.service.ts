@@ -22,10 +22,10 @@ export class OffersService {
     const res = await Promise.all([
       this.userRepository.findOneBy({ id: userId }),
       this.wishRepository.findOneBy({ id: createOfferDto.itemId }),
-    ]).then(([user, item]) => {
+    ]).then(([user, wish]) => {
       const offer = this.offerRepository.create({
         ...createOfferDto,
-        item,
+        item: wish,
         user,
       });
       return this.offerRepository.save(offer);
