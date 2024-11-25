@@ -30,12 +30,12 @@ export class WishesController {
 
   @Get('last')
   getLast() {
-    return this.wishesService.findAll();
+    return this.wishesService.findLast();
   }
 
   @Get('top')
   getTop() {
-    return this.wishesService.findAll();
+    return this.wishesService.findTop();
   }
 
   @UseGuards(JwtGuard)

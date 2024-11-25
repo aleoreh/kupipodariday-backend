@@ -30,6 +30,14 @@ export class WishesService {
     return this.wishRepository.find();
   }
 
+  async findLast() {
+    return this.wishRepository.find({ order: { createdAt: 'desc' } });
+  }
+
+  async findTop() {
+    return this.wishRepository.find({ order: { raised: 'desc' } });
+  }
+
   async findOne(id: number) {
     return this.wishRepository.findOne({
       where: { id },
