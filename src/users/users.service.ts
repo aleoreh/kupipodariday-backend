@@ -48,6 +48,7 @@ export class UsersService {
     return this.userRepository.findOne({
       where: { id },
       select: { password: false },
+      relations: ['wishes'],
     });
   }
 

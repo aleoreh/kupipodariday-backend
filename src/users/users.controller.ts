@@ -33,10 +33,11 @@ export class UsersController {
 
   @UseGuards(JwtGuard)
   @Get('me')
-  findMe(@Req() req): Promise<SafeUserDto> {
+  findMe(@Req() req) {
     return this.usersService
       .findOne(req.user.id)
-      .then((user) => new SafeUserDto(user));
+      .then((user) => new SafeUserDto(user))
+      .catch(this.exceptionHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)
