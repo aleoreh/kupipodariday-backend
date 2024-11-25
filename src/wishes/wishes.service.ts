@@ -93,8 +93,12 @@ export class WishesService {
     return this.wishRepository.update({ id }, updateWishDto);
   }
 
-  async remove(id: number) {
+  async remove(id: number, userId: number) {
     const wish = await this.wishRepository.findOneBy({ id });
+
+    if (wish.owner.id !== userId) {
+      throw new AccessDeniedError('Нельзя удалять чужие желания');
+    }
 
     if (wish.offers.length > 0) {
       throw new AccessDeniedError(
@@ -103,5 +107,11 @@ export class WishesService {
     }
 
     return this.wishRepository.delete({ id });
+  }
+
+  async copy(id: number, userId: number) {
+    const wish = await this.wishRepository.findOneBy({ id });
+
+    return this.create(wish, userId);
   }
 }

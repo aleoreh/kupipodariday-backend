@@ -65,7 +65,9 @@ export class WishesController {
   @UseGuards(JwtGuard)
   @Delete(':id')
   remove(@Req() req, @Param('id') id: string) {
-    return this.wishesService.remove(+id).catch(this.exceptionHandler.toHttp);
+    return this.wishesService
+      .remove(+id, req.user.id)
+      .catch(this.exceptionHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)
