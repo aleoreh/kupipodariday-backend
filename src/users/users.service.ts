@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Like, Repository } from 'typeorm';
+import { FindOptionsSelect, Like, Repository } from 'typeorm';
 import { AlreadyExistsError } from '../errors/already-exists.error';
+import { UserNotFoundError } from '../errors/user-not-found.error';
 import { Wish } from '../wishes/entities/wish.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { UserNotFoundError } from '../errors/user-not-found.error';
 
 @Injectable()
 export class UsersService {
@@ -44,10 +44,11 @@ export class UsersService {
   async findOne(
     where: { id: number } | { username: string },
     relations: 'wishes'[] = [],
+    select?: FindOptionsSelect<User>,
   ) {
     const user = await this.userRepository.findOne({
       where,
-      select: { password: false },
+      select: { ...select, password: false },
       relations,
     });
 
@@ -60,6 +61,18 @@ export class UsersService {
 
   async findById(id: number) {
     return this.findOne({ id });
+  }
+
+  async findMe(id: number) {
+    return this.findOne({ id }, [], {
+      about: true,
+      avatar: true,
+      createdAt: true,
+      email: true,
+      id: true,
+      updatedAt: true,
+      username: true,
+    });
   }
 
   async findByIdWithWishes(id: number) {
@@ -77,6 +90,7 @@ export class UsersService {
   async findOneForAuthByUsername(username: string): Promise<User> {
     return this.userRepository.findOne({
       where: { username },
+      select: ['id', 'username', 'password'],
     });
   }
 

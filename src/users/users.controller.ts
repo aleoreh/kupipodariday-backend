@@ -35,7 +35,7 @@ export class UsersController {
   @Get('me')
   findMe(@Req() req) {
     return this.usersService
-      .findById(req.user.id)
+      .findMe(req.user.id)
       .then((user) => new SafeUserDto(user))
       .catch(this.exceptionHandler.toHttp);
   }

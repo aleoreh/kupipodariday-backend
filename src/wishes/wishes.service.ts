@@ -6,6 +6,7 @@ import { User } from '../users/entities/user.entity';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { Wish } from './entities/wish.entity';
+import { UserNotFoundError } from '../errors/user-not-found.error';
 
 @Injectable()
 export class WishesService {
@@ -17,13 +18,17 @@ export class WishesService {
   ) {}
 
   async create(createWishDto: CreateWishDto, userId: number) {
-    return this.userRepository.findOneBy({ id: userId }).then((user) => {
-      const wish = this.wishRepository.create({
-        ...createWishDto,
-        owner: user,
-      });
-      return this.wishRepository.save(wish);
+    const user = await this.userRepository.findOneBy({ id: userId });
+
+    if (!user) {
+      throw new UserNotFoundError('Пользователь не найден');
+    }
+
+    const wish = this.wishRepository.create({
+      ...createWishDto,
+      owner: user,
     });
+    return this.wishRepository.save(wish);
   }
 
   async findAll() {
@@ -31,7 +36,10 @@ export class WishesService {
   }
 
   async findLast() {
-    return this.wishRepository.find({ order: { createdAt: 'desc' } });
+    return this.wishRepository.find({
+      order: { createdAt: 'desc' },
+      relations: ['owner'],
+    });
   }
 
   async findTop() {
