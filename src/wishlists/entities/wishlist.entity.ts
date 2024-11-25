@@ -3,9 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Wishlist {
@@ -32,4 +34,7 @@ export class Wishlist {
 
   @Column('text', { array: true })
   items: string[];
+
+  @ManyToOne(() => User, (user) => user.wishlists)
+  user: User;
 }

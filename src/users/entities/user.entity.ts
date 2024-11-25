@@ -52,9 +52,9 @@ export class User implements IUser {
   @OneToMany(() => Wish, (wish) => wish.owner)
   wishes: Wish[];
 
-  @OneToMany(() => Offer, (offer) => offer.id)
+  @OneToMany(() => Offer, (offer) => offer.user)
   offers: Offer[];
 
-  @OneToMany(() => Wishlist, (wishlist) => wishlist.id)
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.user)
   wishlists: Wishlist[];
 }

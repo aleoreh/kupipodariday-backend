@@ -3,7 +3,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -41,16 +40,16 @@ export class Wish {
   @Column('decimal', { scale: 2, default: 0 })
   raised: number;
 
-  @ManyToOne(() => User, (user) => user.wishes)
-  owner: User;
-
   @Column({ default: '' })
   @Length(1, 1024)
   description: string;
 
-  @OneToMany(() => Offer, (offer) => offer.id)
-  offers: Offer[];
-
   @Column('decimal', { scale: 2, default: 0 })
   copied: number;
+
+  @ManyToOne(() => User, (user) => user.wishes)
+  owner: User;
+
+  @OneToMany(() => Offer, (offer) => offer.item)
+  offers: Offer[];
 }

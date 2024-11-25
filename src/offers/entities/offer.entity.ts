@@ -20,15 +20,15 @@ export class Offer {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => User, (user) => user.offers)
-  user: User;
-
-  @ManyToOne(() => Wish, (wish) => wish.offers)
-  item: Wish;
-
   @Column('decimal', { scale: 2 })
   amount: number;
 
   @Column({ default: false })
   hidden: boolean;
+
+  @ManyToOne(() => User, (user) => user.offers)
+  user: User;
+
+  @ManyToOne(() => Wish, (wish) => wish.offers)
+  item: Wish;
 }
