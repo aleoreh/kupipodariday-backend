@@ -25,17 +25,19 @@ export class WishesController {
   @UseGuards(JwtGuard)
   @Post()
   create(@Req() req, @Body() createWishDto: CreateWishDto) {
-    return this.wishesService.create(createWishDto, req.user.id);
+    return this.wishesService
+      .create(createWishDto, req.user.id)
+      .catch(this.exceptionHandler.toHttp);
   }
 
   @Get('last')
   getLast() {
-    return this.wishesService.findLast();
+    return this.wishesService.findLast().catch(this.exceptionHandler.toHttp);
   }
 
   @Get('top')
   getTop() {
-    return this.wishesService.findTop();
+    return this.wishesService.findTop().catch(this.exceptionHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)
@@ -52,20 +54,18 @@ export class WishesController {
 
   @Get()
   findAll() {
-    return this.wishesService.findAll();
+    return this.wishesService.findAll().catch(this.exceptionHandler.toHttp);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.wishesService.findOne(+id);
+    return this.wishesService.findOne(+id).catch(this.exceptionHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)
   @Delete(':id')
   remove(@Req() req, @Param('id') id: string) {
-    return this.wishesService.remove(+id).catch((err) => {
-      throw this.exceptionHandler.toHttp(err);
-    });
+    return this.wishesService.remove(+id).catch(this.exceptionHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)
@@ -73,6 +73,7 @@ export class WishesController {
   copy(@Req() req, @Param('id') id: number) {
     return this.wishesService
       .findOne(id)
-      .then((wish) => this.wishesService.create(wish, req.user.id));
+      .then((wish) => this.wishesService.create(wish, req.user.id))
+      .catch(this.exceptionHandler.toHttp);
   }
 }
