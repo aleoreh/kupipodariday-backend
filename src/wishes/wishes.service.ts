@@ -10,6 +10,9 @@ import { UserNotFoundError } from '../errors/user-not-found.error';
 
 @Injectable()
 export class WishesService {
+  private numberOfLastWishes = 40;
+  private numberOfTopWishes = 20;
+
   constructor(
     @InjectRepository(Wish)
     private wishRepository: Repository<Wish>,
@@ -49,11 +52,16 @@ export class WishesService {
     return this.wishRepository.find({
       order: { createdAt: 'desc' },
       relations: ['owner'],
+      take: this.numberOfLastWishes,
     });
   }
 
   async findTop() {
-    return this.wishRepository.find({ order: { raised: 'desc' } });
+    return this.wishRepository.find({
+      order: { copied: 'desc' },
+      relations: ['owner'],
+      take: this.numberOfTopWishes,
+    });
   }
 
   async findOne(id: number) {
