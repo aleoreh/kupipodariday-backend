@@ -19,7 +19,7 @@ export class OffersService {
   ) {}
 
   async create(createOfferDto: CreateOfferDto, userId: number) {
-    return Promise.all([
+    const res = await Promise.all([
       this.userRepository.findOneBy({ id: userId }),
       this.wishRepository.findOneBy({ id: createOfferDto.itemId }),
     ]).then(([user, item]) => {
@@ -30,6 +30,8 @@ export class OffersService {
       });
       return this.offerRepository.save(offer);
     });
+
+    return res;
   }
 
   async findAll() {
@@ -39,7 +41,10 @@ export class OffersService {
   }
 
   async findOne(id: number) {
-    return this.offerRepository.findOneBy({ id });
+    return this.offerRepository.findOne({
+      where: { id },
+      relations: ['item', 'user'],
+    });
   }
 
   async update(id: number, updateOfferDto: UpdateOfferDto) {

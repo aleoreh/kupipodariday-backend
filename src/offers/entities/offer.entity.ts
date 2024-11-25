@@ -7,7 +7,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
-import { IsUrl } from 'class-validator';
 import { Wish } from '../../wishes/entities/wish.entity';
 
 @Entity()
@@ -25,7 +24,6 @@ export class Offer {
   user: User;
 
   @ManyToOne(() => Wish, (wish) => wish.offers)
-  @IsUrl()
   item: Wish;
 
   @Column('decimal', { scale: 2 })

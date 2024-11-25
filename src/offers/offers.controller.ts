@@ -29,11 +29,11 @@ export class OffersController {
 
   @Get()
   findAll() {
-    return this.offersService.findAll();
+    return this.offersService.findAll().catch(this.errorHandler.toHttp);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.offersService.findOne(+id);
+    return this.offersService.findOne(+id).catch(this.errorHandler.toHttp);
   }
 }

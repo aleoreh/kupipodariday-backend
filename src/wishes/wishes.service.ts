@@ -67,7 +67,7 @@ export class WishesService {
   async findOne(id: number) {
     return this.wishRepository.findOne({
       where: { id },
-      relations: { owner: true },
+      relations: ['owner', 'offers'],
     });
   }
 

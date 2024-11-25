@@ -3,10 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Offer } from '../../offers/entities/offer.entity';
 import { User } from '../../users/entities/user.entity';
 
 @Entity()
@@ -45,8 +48,8 @@ export class Wish {
   @Length(1, 1024)
   description: string;
 
-  @Column('text', { array: true, default: [] })
-  offers: string[];
+  @OneToMany(() => Offer, (offer) => offer.id)
+  offers: Offer[];
 
   @Column('decimal', { scale: 2, default: 0 })
   copied: number;
