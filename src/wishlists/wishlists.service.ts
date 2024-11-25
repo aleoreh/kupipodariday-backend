@@ -27,7 +27,7 @@ export class WishlistsService {
   }
 
   async findAll() {
-    return this.wishlistRepository.find();
+    return this.wishlistRepository.find({ relations: { items: true } });
   }
 
   async findOne(id: number) {
