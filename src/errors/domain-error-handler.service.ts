@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { AccessDeniedError } from './access-denied.error';
 import { AlreadyExistsError } from './already-exists.error';
 import { DomainError } from './domain-error';
+import { UserNotFoundError } from './user-not-found.error';
 
 @Injectable()
 export class DomainErrorHandler {
@@ -12,6 +13,8 @@ export class DomainErrorHandler {
 
     if (error instanceof AlreadyExistsError)
       httpStatus = HttpStatus.BAD_REQUEST;
+
+    if (error instanceof UserNotFoundError) httpStatus = HttpStatus.NOT_FOUND;
 
     // используем статический метод логгера, так как метод toHttp используется
     // в контроллерах без привязки this (promise.catch(this.exceptionHandler.toHttp))

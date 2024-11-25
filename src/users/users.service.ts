@@ -7,6 +7,7 @@ import { Wish } from '../wishes/entities/wish.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { UserNotFoundError } from '../errors/user-not-found.error';
 
 @Injectable()
 export class UsersService {
@@ -44,11 +45,17 @@ export class UsersService {
     where: { id: number } | { username: string },
     relations: 'wishes'[] = [],
   ) {
-    return this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where,
       select: { password: false },
       relations,
     });
+
+    if (!user) {
+      throw new UserNotFoundError('Такой пользователь не найден');
+    }
+
+    return user;
   }
 
   async findById(id: number) {
