@@ -49,16 +49,6 @@ export class WishesController {
       .findOne(+id)
       .then((wish) => {
         // подстроимся под frontend (добавим в offers поля name, img)
-        // на фронтенде в gift-page.jsx нужно подправить:
-        /*
-        {wishData?.offers?.length ? (
-          wishData?.offers?.map(({ name, amount, createdAt, img }) => (
-            <UserSupportedCard name={name} amount={amount} date={createdAt} img={img}/>
-          ))
-        ) : (
-          <p>Пока никого нет</p>
-        )}
-        */
         return {
           ...wish,
           offers: wish.offers.map((offer) => ({
