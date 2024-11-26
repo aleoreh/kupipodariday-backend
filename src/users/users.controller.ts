@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 import { JwtGuard } from '../jwt/jwt.guard';
-import { CreateUserDto } from './dto/create-user.dto';
 import { PublicUserDto } from './dto/public-user.dto';
 import { SafeUserDto } from './dto/safe-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -22,14 +21,6 @@ export class UsersController {
     private readonly usersService: UsersService,
     private readonly errorHandler: DomainErrorHandler,
   ) {}
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService
-      .create(createUserDto)
-      .then((user) => new SafeUserDto(user))
-      .catch(this.errorHandler.toHttp);
-  }
 
   @UseGuards(JwtGuard)
   @Get('me')

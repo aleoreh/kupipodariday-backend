@@ -8,6 +8,7 @@ import { Wish } from '../wishes/entities/wish.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { SafeUserDto } from './dto/safe-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +18,10 @@ export class UsersService {
     @InjectRepository(Wish)
     private wishRepository: Repository<Wish>,
   ) {}
+
+  static toSafeUserDto(user: User) {
+    return new SafeUserDto(user);
+  }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const foundUser = await this.userRepository.findOneBy([
@@ -28,7 +33,7 @@ export class UsersService {
 
     if (foundUser) {
       throw new AlreadyExistsError(
-        'Пользователь с таким именем или электронной почтой уже есть!',
+        'Пользователь с таким email или username уже зарегистрирован',
       );
     }
 

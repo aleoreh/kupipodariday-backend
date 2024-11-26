@@ -24,8 +24,10 @@ export class AuthController {
     return this.usersService
       .create(createUserDto)
       .then((user) => {
-        return this.authService.auth(user);
+        this.authService.auth(user);
+        return user;
       })
+      .then(UsersService.toSafeUserDto)
       .catch(this.exceptionHandler.toHttp);
   }
 }
