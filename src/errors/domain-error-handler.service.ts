@@ -13,8 +13,7 @@ export class DomainErrorHandler {
     // TODO: if-elseif
     if (error instanceof AccessDeniedError) httpStatus = HttpStatus.FORBIDDEN;
 
-    if (error instanceof AlreadyExistsError)
-      httpStatus = HttpStatus.BAD_REQUEST;
+    if (error instanceof AlreadyExistsError) httpStatus = 409;
 
     if (error instanceof UserNotFoundError) httpStatus = HttpStatus.NOT_FOUND;
 
