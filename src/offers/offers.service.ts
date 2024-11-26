@@ -21,6 +21,8 @@ export class OffersService {
   ) {}
 
   async create(createOfferDto: CreateOfferDto, userId: number) {
+    let res: Offer;
+
     const [user, wish] = await Promise.all([
       this.userRepository.findOneBy({ id: userId }),
       this.wishRepository.findOne({
@@ -49,14 +51,15 @@ export class OffersService {
 
     try {
       await this.wishRepository.save({ ...wish, raised: newRaised });
-      const res = await this.offerRepository.save(offer);
+      res = await this.offerRepository.save(offer);
       await queryRunner.commitTransaction();
-      return res;
     } catch (err) {
       await queryRunner.rollbackTransaction();
     } finally {
       await queryRunner.release();
     }
+
+    return res;
   }
 
   async findAll() {
