@@ -80,7 +80,13 @@ export class WishesService {
   }
 
   async update(id: number, updateWishDto: UpdateWishDto, userId: number) {
-    const wish = await this.wishRepository.findOneBy({ id });
+    const wish = await this.wishRepository.findOne({
+      where: { id },
+      relations: { owner: true, offers: true },
+    });
+
+    if ('raised' in updateWishDto)
+      throw new AccessDeniedError('Нельзя изменять сумму собранных средств');
 
     if (wish.owner.id !== userId) {
       throw new AccessDeniedError('Нельзя изменять чужое желание');
