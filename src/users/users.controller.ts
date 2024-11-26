@@ -70,7 +70,7 @@ export class UsersController {
   getUserWishes(@Param('username') username: string) {
     return this.usersService
       .findByUsernameWithWishes(username)
-      .then((user) => ({ ...new PublicUserDto(user), wishes: user.wishes }))
+      .then((user) => user.wishes)
       .catch(this.exceptionHandler.toHttp);
   }
 
