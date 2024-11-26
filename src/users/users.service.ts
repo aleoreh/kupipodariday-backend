@@ -4,24 +4,16 @@ import * as bcrypt from 'bcrypt';
 import { FindOptionsSelect, Like, Repository } from 'typeorm';
 import { AlreadyExistsError } from '../errors/already-exists.error';
 import { UserNotFoundError } from '../errors/user-not-found.error';
-import { Wish } from '../wishes/entities/wish.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { SafeUserDto } from './dto/safe-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @InjectRepository(Wish)
-    private wishRepository: Repository<Wish>,
   ) {}
-
-  static toSafeUserDto(user: User) {
-    return new SafeUserDto(user);
-  }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const foundUser = await this.userRepository.findOneBy([
