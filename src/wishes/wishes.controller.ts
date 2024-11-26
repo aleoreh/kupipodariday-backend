@@ -30,13 +30,11 @@ export class WishesController {
       .catch(this.exceptionHandler.toHttp);
   }
 
-  @UseGuards(JwtGuard)
   @Get('last')
   getLast() {
     return this.wishesService.findLast().catch(this.exceptionHandler.toHttp);
   }
 
-  @UseGuards(JwtGuard)
   @Get('top')
   getTop() {
     return this.wishesService.findTop().catch(this.exceptionHandler.toHttp);
