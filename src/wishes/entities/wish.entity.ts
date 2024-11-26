@@ -34,17 +34,17 @@ export class Wish {
   @IsUrl()
   image: string;
 
-  @Column('decimal', { scale: 2 })
+  @Column({ default: 0 })
   price: number;
 
-  @Column('decimal', { scale: 2, default: 0 })
+  @Column({ default: 0 })
   raised: number;
 
   @Column({ default: '' })
   @Length(1, 1024)
   description: string;
 
-  @Column('decimal', { scale: 2, default: 0 })
+  @Column({ default: 0 })
   copied: number;
 
   @ManyToOne(() => User, (user) => user.wishes)
