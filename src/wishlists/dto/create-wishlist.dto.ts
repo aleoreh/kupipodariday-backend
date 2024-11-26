@@ -1,4 +1,4 @@
-import { IsNumber, IsString, IsUrl } from 'class-validator';
+import { IsString, IsUrl } from 'class-validator';
 
 export class CreateWishlistDto {
   @IsString()
@@ -7,6 +7,5 @@ export class CreateWishlistDto {
   @IsUrl()
   image: string;
 
-  @IsNumber()
   itemsId: number[];
 }
