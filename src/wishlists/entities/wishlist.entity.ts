@@ -37,7 +37,7 @@ export class Wishlist {
   @IsUrl()
   image: string;
 
-  @ManyToMany(() => Wish)
+  @ManyToMany(() => Wish, { cascade: true })
   @JoinTable()
   items: Wish[];
 

@@ -69,7 +69,7 @@ export class WishesService {
   async findOne(id: number) {
     return this.wishRepository.findOne({
       where: { id },
-      relations: ['owner', 'offers'],
+      relations: { owner: true, offers: { user: true } },
     });
   }
 
