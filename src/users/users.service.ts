@@ -8,6 +8,16 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
+const findOptionsSelectWithEmail: FindOptionsSelect<User> = {
+  about: true,
+  avatar: true,
+  createdAt: true,
+  email: true,
+  id: true,
+  updatedAt: true,
+  username: true,
+};
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -29,12 +39,16 @@ export class UsersService {
       );
     }
 
-    return bcrypt.hash(createUserDto.password, 10).then((hashedPassword) => {
-      const user = this.userRepository.create({
-        ...createUserDto,
-        password: hashedPassword,
-      });
-      return this.userRepository.save(user);
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+
+    const user = this.userRepository.create({
+      ...createUserDto,
+      password: hashedPassword,
+    });
+    const savedUser = await this.userRepository.save(user);
+    return await this.userRepository.findOne({
+      where: { id: savedUser.id },
+      select: findOptionsSelectWithEmail,
     });
   }
 
@@ -61,15 +75,7 @@ export class UsersService {
   }
 
   async findMe(id: number) {
-    return this.findOne({ id }, [], {
-      about: true,
-      avatar: true,
-      createdAt: true,
-      email: true,
-      id: true,
-      updatedAt: true,
-      username: true,
-    });
+    return this.findOne({ id }, [], findOptionsSelectWithEmail);
   }
 
   async findByIdWithWishes(id: number) {
@@ -102,7 +108,8 @@ export class UsersService {
         )
       : updateUserDto);
     await this.userRepository.update({ id }, data);
-    return this.findById(id);
+    // TODO: this.findMe используется для получения User с полем email
+    return this.findMe(id);
   }
 
   async remove(id: number) {
@@ -112,6 +119,7 @@ export class UsersService {
   async find(query: string) {
     return this.userRepository.find({
       where: [{ username: Like(`%${query}%`) }, { email: Like(`%${query}%`) }],
+      select: findOptionsSelectWithEmail,
     });
   }
 

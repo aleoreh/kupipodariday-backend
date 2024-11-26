@@ -10,8 +10,6 @@ import {
 } from '@nestjs/common';
 import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 import { JwtGuard } from '../jwt/jwt.guard';
-import { PublicUserDto } from './dto/public-user.dto';
-import { SafeUserDto } from './dto/safe-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 
@@ -27,7 +25,6 @@ export class UsersController {
   findMe(@Req() req) {
     return this.usersService
       .findMe(req.user.id)
-      .then((user) => new SafeUserDto(user))
       .catch(this.errorHandler.toHttp);
   }
 
@@ -36,7 +33,6 @@ export class UsersController {
   update(@Req() req, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService
       .update(req.user.id, updateUserDto)
-      .then((user) => new SafeUserDto(user))
       .catch(this.errorHandler.toHttp);
   }
 
@@ -53,7 +49,6 @@ export class UsersController {
   findByUsername(@Param('username') username: string) {
     return this.usersService
       .findByUsername(username)
-      .then((user) => new PublicUserDto(user))
       .catch(this.errorHandler.toHttp);
   }
 
@@ -67,9 +62,6 @@ export class UsersController {
 
   @Post('find')
   findMany(@Body() param: { query: string }) {
-    return this.usersService
-      .find(param.query)
-      .then((users) => users.map((user) => new SafeUserDto(user)))
-      .catch(this.errorHandler.toHttp);
+    return this.usersService.find(param.query).catch(this.errorHandler.toHttp);
   }
 }
