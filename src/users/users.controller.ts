@@ -20,7 +20,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly exceptionHandler: DomainErrorHandler,
+    private readonly errorHandler: DomainErrorHandler,
   ) {}
 
   @Post()
@@ -28,7 +28,7 @@ export class UsersController {
     return this.usersService
       .create(createUserDto)
       .then((user) => new SafeUserDto(user))
-      .catch(this.exceptionHandler.toHttp);
+      .catch(this.errorHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)
@@ -37,7 +37,7 @@ export class UsersController {
     return this.usersService
       .findMe(req.user.id)
       .then((user) => new SafeUserDto(user))
-      .catch(this.exceptionHandler.toHttp);
+      .catch(this.errorHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)
@@ -46,7 +46,7 @@ export class UsersController {
     return this.usersService
       .update(req.user.id, updateUserDto)
       .then((user) => new SafeUserDto(user))
-      .catch(this.exceptionHandler.toHttp);
+      .catch(this.errorHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)
@@ -55,7 +55,7 @@ export class UsersController {
     return this.usersService
       .findByIdWithWishes(req.user.id)
       .then((user) => user.wishes)
-      .catch(this.exceptionHandler.toHttp);
+      .catch(this.errorHandler.toHttp);
   }
 
   @Get(':username')
@@ -63,7 +63,7 @@ export class UsersController {
     return this.usersService
       .findByUsername(username)
       .then((user) => new PublicUserDto(user))
-      .catch(this.exceptionHandler.toHttp);
+      .catch(this.errorHandler.toHttp);
   }
 
   @Get(':username/wishes')
@@ -71,7 +71,7 @@ export class UsersController {
     return this.usersService
       .findByUsernameWithWishes(username)
       .then((user) => user.wishes)
-      .catch(this.exceptionHandler.toHttp);
+      .catch(this.errorHandler.toHttp);
   }
 
   @Post('find')
@@ -79,6 +79,6 @@ export class UsersController {
     return this.usersService
       .find(param.query)
       .then((users) => users.map((user) => new SafeUserDto(user)))
-      .catch(this.exceptionHandler.toHttp);
+      .catch(this.errorHandler.toHttp);
   }
 }

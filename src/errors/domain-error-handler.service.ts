@@ -10,6 +10,7 @@ export class DomainErrorHandler {
   toHttp(error: DomainError): HttpException {
     let httpStatus: HttpStatus | null = null;
 
+    // TODO: if-elseif
     if (error instanceof AccessDeniedError) httpStatus = HttpStatus.FORBIDDEN;
 
     if (error instanceof AlreadyExistsError)
