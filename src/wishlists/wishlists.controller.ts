@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { DomainErrorHandler } from '../errors/domain-error-handler.service';
@@ -44,17 +45,20 @@ export class WishlistsController {
   @UseGuards(JwtGuard)
   @Patch(':id')
   update(
+    @Req() req,
     @Param('id') id: string,
     @Body() updateWhishlistDto: UpdateWishlistDto,
   ) {
     return this.wishlistsService
-      .update(+id, updateWhishlistDto)
+      .update(+id, updateWhishlistDto, req.user.id)
       .catch(this.errorHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.wishlistsService.remove(+id).catch(this.errorHandler.toHttp);
+  remove(@Req() req, @Param('id') id: string) {
+    return this.wishlistsService
+      .remove(+id, req.user.id)
+      .catch(this.errorHandler.toHttp);
   }
 }

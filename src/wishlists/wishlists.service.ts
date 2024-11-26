@@ -5,6 +5,7 @@ import { Wish } from '../wishes/entities/wish.entity';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-whishlist.dto';
 import { Wishlist } from './entities/wishlist.entity';
+import { AccessDeniedError } from '../errors/access-denied.error';
 
 @Injectable()
 export class WishlistsService {
@@ -38,11 +39,19 @@ export class WishlistsService {
     });
   }
 
-  async update(id: number, updateWishlistDto: UpdateWishlistDto) {
+  async update(
+    id: number,
+    updateWishlistDto: UpdateWishlistDto,
+    userId: number,
+  ) {
+    const wishlist = await this.findOne(id);
+
+    if (wishlist.user.id !== userId)
+      throw new AccessDeniedError('Нельзя редактировать чужую подборку');
+
     const items = await this.wishRepository.find({
       where: { id: In(updateWishlistDto.itemsId) },
     });
-    const wishlist = await this.findOne(id);
 
     await this.wishlistRepository.save({
       ...wishlist,
@@ -52,7 +61,12 @@ export class WishlistsService {
     return this.findOne(id);
   }
 
-  async remove(id: number) {
+  async remove(id: number, userId: number) {
+    const wishlist = await this.findOne(id);
+
+    if (wishlist.user.id !== userId)
+      throw new AccessDeniedError('Нельзя удалять чужую подборку');
+
     return this.wishlistRepository.delete({ id });
   }
 }
