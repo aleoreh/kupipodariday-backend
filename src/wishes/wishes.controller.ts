@@ -43,6 +43,12 @@ export class WishesController {
   }
 
   @UseGuards(JwtGuard)
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.wishesService.findOne(+id).catch(this.exceptionHandler.toHttp);
+  }
+
+  @UseGuards(JwtGuard)
   @Patch(':id')
   update(
     @Req() req,
@@ -52,12 +58,6 @@ export class WishesController {
     return this.wishesService
       .update(+id, updateWishDto, req.user.id)
       .catch(this.exceptionHandler.toHttp);
-  }
-
-  @UseGuards(JwtGuard)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.wishesService.findOne(+id).catch(this.exceptionHandler.toHttp);
   }
 
   @UseGuards(JwtGuard)
