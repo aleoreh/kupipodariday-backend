@@ -39,7 +39,16 @@ export class WishlistsService {
   }
 
   async update(id: number, updateWishlistDto: UpdateWishlistDto) {
-    await this.wishlistRepository.update({ id }, updateWishlistDto);
+    const items = await this.wishRepository.find({
+      where: { id: In(updateWishlistDto.itemsId) },
+    });
+    const wishlist = await this.findOne(id);
+
+    await this.wishlistRepository.save({
+      ...wishlist,
+      ...updateWishlistDto,
+      items,
+    });
     return this.findOne(id);
   }
 

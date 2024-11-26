@@ -81,12 +81,12 @@ export class WishesService {
     const wish = await this.wishRepository.findOneBy({ id });
 
     if (wish.owner.id !== userId) {
-      throw new AccessDeniedError('Нельзя редактировать чужие желания');
+      throw new AccessDeniedError('Нельзя изменять чужое желание');
     }
 
     if ('price' in updateWishDto && wish.offers.length > 0) {
       throw new AccessDeniedError(
-        'Уже есть желающие скинуться. Ничего изменить стоимость',
+        'Уже есть желающие скинуться. Нельзя изменить стоимость',
       );
     }
 
