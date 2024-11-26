@@ -55,12 +55,6 @@ export class WishesController {
   }
 
   @UseGuards(JwtGuard)
-  @Get()
-  findAll() {
-    return this.wishesService.findAll().catch(this.exceptionHandler.toHttp);
-  }
-
-  @UseGuards(JwtGuard)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.wishesService.findOne(+id).catch(this.exceptionHandler.toHttp);
