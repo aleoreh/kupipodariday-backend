@@ -23,7 +23,7 @@ export class User implements IUser {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column()
+  @Column({ unique: true })
   @Length(2, 30)
   username: string;
 
