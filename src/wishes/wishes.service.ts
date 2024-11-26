@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { AccessDeniedError } from '../errors/access-denied.error';
+import { UserNotFoundError } from '../errors/user-not-found.error';
 import { User } from '../users/entities/user.entity';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { Wish } from './entities/wish.entity';
-import { UserNotFoundError } from '../errors/user-not-found.error';
 
 @Injectable()
 export class WishesService {
@@ -18,6 +18,7 @@ export class WishesService {
     private wishRepository: Repository<Wish>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(createWishDto: CreateWishDto, userId: number) {
@@ -30,6 +31,7 @@ export class WishesService {
     const wish = this.wishRepository.create({
       ...createWishDto,
       owner: user,
+      raised: 0,
     });
     const res = await this.wishRepository.save(wish);
 
@@ -110,8 +112,31 @@ export class WishesService {
   }
 
   async copy(id: number, userId: number) {
-    const wish = await this.wishRepository.findOneBy({ id });
+    let res: Wish;
 
-    return this.create(wish, userId);
+    const wish = await this.wishRepository.findOneBy({ id });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id: id_, createdAt, updatedAt, copied, raised, ...newWish } = wish;
+
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await this.wishRepository.save({
+        ...wish,
+        copied: wish.copied + 1,
+        raised: 0,
+      });
+      res = await this.create(newWish, userId);
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      queryRunner.release();
+    }
+
+    return res;
   }
 }

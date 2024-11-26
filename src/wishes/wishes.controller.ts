@@ -78,8 +78,7 @@ export class WishesController {
   @Post(':id/copy')
   copy(@Req() req, @Param('id') id: number) {
     return this.wishesService
-      .findOne(id)
-      .then((wish) => this.wishesService.create(wish, req.user.id))
+      .copy(id, req.user.id)
       .catch(this.exceptionHandler.toHttp);
   }
 }
