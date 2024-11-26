@@ -96,7 +96,10 @@ export class WishesService {
   }
 
   async remove(id: number, userId: number) {
-    const wish = await this.wishRepository.findOneBy({ id });
+    const wish = await this.wishRepository.findOne({
+      where: { id },
+      relations: { owner: true, offers: true },
+    });
 
     if (wish.owner.id !== userId) {
       throw new AccessDeniedError('Нельзя удалять чужие желания');
