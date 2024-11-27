@@ -7,6 +7,7 @@ import { UpdateOfferDto } from './dto/update-offer.dto';
 import { Offer } from './entities/offer.entity';
 import { Wish } from '../wishes/entities/wish.entity';
 import { BadOfferError } from '../errors/bad-offer.error';
+import { NotFoundError } from '../errors/not-found.error';
 
 @Injectable()
 export class OffersService {
@@ -30,6 +31,8 @@ export class OffersService {
         relations: { owner: true },
       }),
     ]);
+
+    if (!wish) throw new NotFoundError('Желание не найдено');
 
     if (userId === wish.owner.id)
       throw new BadOfferError('Нельзя вносить деньги на собственные желания');
