@@ -21,6 +21,18 @@ export class WishesService {
     private readonly dataSource: DataSource,
   ) {}
 
+  private getWishData(
+    wish: Wish,
+  ): Pick<Wish, 'image' | 'link' | 'name' | 'description' | 'price'> {
+    return {
+      description: wish.description,
+      image: wish.image,
+      link: wish.link,
+      name: wish.name,
+      price: wish.price,
+    };
+  }
+
   async create(createWishDto: CreateWishDto, userId: number) {
     const user = await this.userRepository.findOneBy({ id: userId });
 
@@ -124,8 +136,7 @@ export class WishesService {
     let res: Wish;
 
     const wish = await this.wishRepository.findOneBy({ id });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id: id_, createdAt, updatedAt, copied, raised, ...newWish } = wish;
+    const newWish = this.getWishData(wish);
 
     const queryRunner = this.dataSource.createQueryRunner();
 
@@ -143,7 +154,7 @@ export class WishesService {
     } catch (err) {
       await queryRunner.rollbackTransaction();
     } finally {
-      queryRunner.release();
+      await queryRunner.release();
     }
 
     return res;
