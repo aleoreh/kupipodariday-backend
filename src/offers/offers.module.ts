@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 import { User } from '../users/entities/user.entity';
 import { Wish } from '../wishes/entities/wish.entity';
 import { Offer } from './entities/offer.entity';
@@ -14,7 +13,7 @@ import { OffersService } from './offers.service';
     TypeOrmModule.forFeature([Wish]),
   ],
   controllers: [OffersController],
-  providers: [OffersService, DomainErrorHandler],
+  providers: [OffersService],
   exports: [OffersService],
 })
 export class OffersModule {}

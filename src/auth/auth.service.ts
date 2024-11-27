@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
@@ -11,7 +10,6 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
-    private readonly errorHandler: DomainErrorHandler,
   ) {}
 
   private auth(user: User) {
@@ -27,13 +25,9 @@ export class AuthService {
   }
 
   async signup(createUserDto: CreateUserDto) {
-    try {
-      const user = await this.usersService.create(createUserDto);
-      this.auth(user);
-      return user;
-    } catch (err) {
-      this.errorHandler.toHttp(err);
-    }
+    const user = await this.usersService.create(createUserDto);
+    this.auth(user);
+    return user;
   }
 
   async validatePassword(username: string, password: string) {

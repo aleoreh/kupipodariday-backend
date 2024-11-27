@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
 import { AccessDeniedError } from '../errors/access-denied.error';
+import { NotFoundError } from '../errors/not-found.error';
 import { User } from '../users/entities/user.entity';
 import { Wish } from '../wishes/entities/wish.entity';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-whishlist.dto';
 import { Wishlist } from './entities/wishlist.entity';
-import { NotFoundError } from '../errors/not-found.error';
 
 @Injectable()
 export class WishlistsService {
@@ -41,10 +41,14 @@ export class WishlistsService {
   }
 
   async findOne(id: number) {
-    return this.wishlistRepository.findOne({
+    const wishlist = await this.wishlistRepository.findOne({
       where: { id },
       relations: { items: true, user: true },
     });
+
+    if (!wishlist) throw new NotFoundError('Подборка не найдена');
+
+    return wishlist;
   }
 
   async update(
@@ -74,7 +78,7 @@ export class WishlistsService {
   async remove(id: number, userId: number) {
     const wishlist = await this.findOne(id);
 
-    if (!wishlist) throw new NotFoundError('Список не найден');
+    if (!wishlist) throw new NotFoundError('Подборка не найдена');
 
     if (wishlist.user && wishlist.user.id !== userId)
       throw new AccessDeniedError('Нельзя удалять чужую подборку');

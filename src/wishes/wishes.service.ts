@@ -79,16 +79,20 @@ export class WishesService {
   }
 
   async findOne(id: number) {
-    return this.wishRepository.findOne({
+    const wish = await this.wishRepository.findOne({
       where: { id },
       relations: { owner: true, offers: { user: true } },
     });
+    if (!wish) throw new NotFoundError('Такое желание не найдено');
+    return wish;
   }
 
   async findByOwner(ownerId: number) {
-    return this.userRepository
+    const wish = await this.userRepository
       .findOneBy({ id: ownerId })
       .then((user) => this.wishRepository.findBy({ owner: user }));
+    if (!wish) throw new NotFoundError('Такое желание не найдено');
+    return wish;
   }
 
   async update(id: number, updateWishDto: UpdateWishDto, userId: number) {
@@ -96,6 +100,8 @@ export class WishesService {
       where: { id },
       relations: { owner: true, offers: true },
     });
+
+    if (!wish) throw new NotFoundError('Такое желание не найдено');
 
     if ('raised' in updateWishDto)
       throw new AccessDeniedError('Нельзя изменять сумму собранных средств');
@@ -119,6 +125,8 @@ export class WishesService {
       relations: { owner: true, offers: true },
     });
 
+    if (!wish) throw new NotFoundError('Такое желание не найдено');
+
     if (wish.owner.id !== userId) {
       throw new AccessDeniedError('Нельзя удалять чужие желания');
     }
@@ -136,6 +144,9 @@ export class WishesService {
     let res: Wish;
 
     const wish = await this.wishRepository.findOneBy({ id });
+
+    if (!wish) throw new NotFoundError('Такое желание не найдено');
+
     const newWish = this.getWishData(wish);
 
     const queryRunner = this.dataSource.createQueryRunner();

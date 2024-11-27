@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,8 +15,6 @@ import { Wish } from './wishes/entities/wish.entity';
 import { WishesModule } from './wishes/wishes.module';
 import { Wishlist } from './wishlists/entities/wishlist.entity';
 import { WishlistsModule } from './wishlists/wishlists.module';
-import { ConfigModule } from '@nestjs/config';
-import { DomainErrorHandler } from './errors/domain-error-handler.service';
 
 @Module({
   imports: [
@@ -40,6 +39,6 @@ import { DomainErrorHandler } from './errors/domain-error-handler.service';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService, DomainErrorHandler],
+  providers: [AppService, AuthService],
 })
 export class AppModule {}

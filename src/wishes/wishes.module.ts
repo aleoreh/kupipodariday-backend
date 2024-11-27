@@ -4,12 +4,11 @@ import { User } from '../users/entities/user.entity';
 import { Wish } from './entities/wish.entity';
 import { WishesController } from './wishes.controller';
 import { WishesService } from './wishes.service';
-import { DomainErrorHandler } from '../errors/domain-error-handler.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Wish]), TypeOrmModule.forFeature([User])],
   controllers: [WishesController],
-  providers: [WishesService, DomainErrorHandler],
+  providers: [WishesService],
   exports: [WishesService],
 })
 export class WishesModule {}

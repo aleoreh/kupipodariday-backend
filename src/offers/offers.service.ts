@@ -72,17 +72,32 @@ export class OffersService {
   }
 
   async findOne(id: number) {
-    return this.offerRepository.findOne({
+    const offer = await this.offerRepository.findOne({
       where: { id },
       relations: ['item', 'user'],
     });
+
+    if (!offer) throw new NotFoundError('Такое предложение не найдено');
+
+    return offer;
   }
 
   async update(id: number, updateOfferDto: UpdateOfferDto) {
+    const offer = await this.offerRepository.findOneBy({ id });
+
+    if (!offer) throw new NotFoundError('Такое предложение не найдено');
+
     return this.offerRepository.update({ id }, updateOfferDto);
   }
 
   async remove(id: number) {
+    const offer = await this.offerRepository.findOne({
+      where: { id },
+      relations: ['item', 'user'],
+    });
+
+    if (!offer) throw new NotFoundError('Такое предложение не найдено');
+
     return this.offerRepository.delete({ id });
   }
 }

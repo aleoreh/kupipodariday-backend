@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { FindOptionsSelect, Like, Repository } from 'typeorm';
 import { AlreadyExistsError } from '../errors/already-exists.error';
 import { NotFoundError } from '../errors/not-found.error';
+import { Wish } from '../wishes/entities/wish.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -63,9 +64,8 @@ export class UsersService {
       relations,
     });
 
-    if (!user) {
-      throw new NotFoundError('Такой пользователь не найден');
-    }
+    // TODO: (DRY) поиск с выбросом исключения отрабатывать отдельно (везде)
+    if (!user) throw new NotFoundError('Такой пользователь не найден');
 
     return user;
   }
@@ -78,16 +78,24 @@ export class UsersService {
     return this.findOne({ id }, [], findOptionsSelectWithEmail);
   }
 
-  async findByIdWithWishes(id: number) {
-    return this.findOne({ id }, ['wishes']);
+  async getWishesByUserId(id: number): Promise<Wish[]> {
+    const user = await this.findOne({ id }, ['wishes']);
+
+    if (!user) throw new NotFoundError('Такой пользователь не найден');
+
+    return user.wishes;
   }
 
   async findByUsername(username: string): Promise<User> {
     return this.findOne({ username });
   }
 
-  async findByUsernameWithWishes(username: string): Promise<User> {
-    return this.findOne({ username }, ['wishes']);
+  async getWishesByUsername(username: string): Promise<Wish[]> {
+    const user = await this.findOne({ username }, ['wishes']);
+
+    if (!user) throw new NotFoundError('Такой пользователь не найден');
+
+    return user.wishes;
   }
 
   async findOneForAuthByUsername(username: string): Promise<User> {
