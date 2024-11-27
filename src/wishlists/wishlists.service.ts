@@ -54,6 +54,8 @@ export class WishlistsService {
   ) {
     const wishlist = await this.findOne(id);
 
+    if (!wishlist) throw new NotFoundError('Подборка не найдена');
+
     if (wishlist.user.id !== userId)
       throw new AccessDeniedError('Нельзя редактировать чужую подборку');
 
