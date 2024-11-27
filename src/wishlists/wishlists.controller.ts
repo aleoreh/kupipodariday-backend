@@ -24,9 +24,9 @@ export class WishlistsController {
 
   @UseGuards(JwtGuard)
   @Post()
-  create(@Body() createWhishlistDto: CreateWishlistDto) {
+  create(@Req() req, @Body() createWhishlistDto: CreateWishlistDto) {
     return this.wishlistsService
-      .create(createWhishlistDto)
+      .create(createWhishlistDto, req.user)
       .catch(this.errorHandler.toHttp);
   }
 

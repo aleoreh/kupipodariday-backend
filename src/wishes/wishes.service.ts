@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { AccessDeniedError } from '../errors/access-denied.error';
-import { UserNotFoundError } from '../errors/user-not-found.error';
+import { NotFoundError } from '../errors/not-found.error';
 import { User } from '../users/entities/user.entity';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
@@ -37,7 +37,7 @@ export class WishesService {
     const user = await this.userRepository.findOneBy({ id: userId });
 
     if (!user) {
-      throw new UserNotFoundError('Пользователь не найден');
+      throw new NotFoundError('Пользователь не найден');
     }
 
     const wish = this.wishRepository.create({

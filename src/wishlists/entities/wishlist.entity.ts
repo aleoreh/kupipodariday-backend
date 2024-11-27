@@ -41,6 +41,7 @@ export class Wishlist {
   @JoinTable()
   items: Wish[];
 
+  // в swagger это поле называется `owner`; в описании проекта это не указано
   @ManyToOne(() => User, (user) => user.wishlists)
   user: User;
 }

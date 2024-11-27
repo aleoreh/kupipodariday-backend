@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { FindOptionsSelect, Like, Repository } from 'typeorm';
 import { AlreadyExistsError } from '../errors/already-exists.error';
-import { UserNotFoundError } from '../errors/user-not-found.error';
+import { NotFoundError } from '../errors/not-found.error';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -64,7 +64,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new UserNotFoundError('Такой пользователь не найден');
+      throw new NotFoundError('Такой пользователь не найден');
     }
 
     return user;

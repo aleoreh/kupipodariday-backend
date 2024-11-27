@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { AccessDeniedError } from './access-denied.error';
 import { AlreadyExistsError } from './already-exists.error';
 import { DomainError } from './domain-error';
-import { UserNotFoundError } from './user-not-found.error';
+import { NotFoundError } from './not-found.error';
 import { BadOfferError } from './bad-offer.error';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class DomainErrorHandler {
 
     if (error instanceof AlreadyExistsError) httpStatus = 409;
 
-    if (error instanceof UserNotFoundError) httpStatus = HttpStatus.NOT_FOUND;
+    if (error instanceof NotFoundError) httpStatus = HttpStatus.NOT_FOUND;
 
     if (error instanceof BadOfferError) httpStatus = HttpStatus.BAD_REQUEST;
 

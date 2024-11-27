@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
+import { AccessDeniedError } from '../errors/access-denied.error';
+import { User } from '../users/entities/user.entity';
 import { Wish } from '../wishes/entities/wish.entity';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-whishlist.dto';
 import { Wishlist } from './entities/wishlist.entity';
-import { AccessDeniedError } from '../errors/access-denied.error';
+import { NotFoundError } from '../errors/not-found.error';
 
 @Injectable()
 export class WishlistsService {
@@ -17,25 +19,31 @@ export class WishlistsService {
     private wishRepository: Repository<Wish>,
   ) {}
 
-  async create(createWishlistDto: CreateWishlistDto) {
+  async create(createWishlistDto: CreateWishlistDto, user: User) {
     const wishlist = this.wishlistRepository.create(createWishlistDto);
 
     const items = await this.wishRepository.find({
       where: { id: In(createWishlistDto.itemsId) },
     });
 
-    const { id } = await this.wishlistRepository.save({ ...wishlist, items });
+    const { id } = await this.wishlistRepository.save({
+      ...wishlist,
+      user,
+      items,
+    });
     return this.findOne(id);
   }
 
   async findAll() {
-    return this.wishlistRepository.find({ relations: { items: true } });
+    return this.wishlistRepository.find({
+      relations: { items: true, user: true },
+    });
   }
 
   async findOne(id: number) {
     return this.wishlistRepository.findOne({
       where: { id },
-      relations: { items: true },
+      relations: { items: true, user: true },
     });
   }
 
@@ -64,7 +72,9 @@ export class WishlistsService {
   async remove(id: number, userId: number) {
     const wishlist = await this.findOne(id);
 
-    if (wishlist.user.id !== userId)
+    if (!wishlist) throw new NotFoundError('Список не найден');
+
+    if (wishlist.user && wishlist.user.id !== userId)
       throw new AccessDeniedError('Нельзя удалять чужую подборку');
 
     return this.wishlistRepository.delete({ id });
