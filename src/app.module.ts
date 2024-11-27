@@ -20,6 +20,7 @@ import { DomainErrorHandler } from './errors/domain-error-handler.service';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    // TODO: перенести в переменные окружения
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
